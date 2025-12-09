@@ -9,5 +9,12 @@ pipeline {
                 '''
             }
         }
+        stage('Check Environment') {
+            steps {
+                sh '''
+                    docker --version
+                '''
+            }
+        }
     }
 }
