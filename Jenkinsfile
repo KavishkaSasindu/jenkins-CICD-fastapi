@@ -13,6 +13,7 @@ pipeline {
             steps {
                 sh '''
                     docker --version
+                    docker ps -a
                 '''
             }
         }
