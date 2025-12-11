@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings
+from urllib.parse import quote_plus
 
 class Settings(BaseSettings):
     db_host:str
@@ -7,7 +8,8 @@ class Settings(BaseSettings):
     db_name:str
     
     def db_url(self):
-        db_url = f"mysql+mysqldb://{self.db_user}:{self.db_password}@{self.db_host}:3306/{self.db_name}"
+        password = quote_plus(self.db_password)
+        db_url = f"mysql+mysqlconnector://{self.db_user}:{password}@{self.db_host}:3306/{self.db_name}"
         return db_url
     
     class Config:
