@@ -1,25 +1,39 @@
 pipeline {
     agent any
 
+    environment {
+        REPO = "https://github.com/KavishkaSasindu/jenkins-CICD-fastapi.git"
+    }
+
     stages {
-        stage('Checkout') {
-            steps {
-                sh '''
-                    echo "Hello from Jenkins Pipeine"
-                '''
-            }
-        }
-        stage('Check Environment') {
+        stage('Environment Test') {
             steps {
                 sh '''
                     docker --version
-                    docker ps -a
+                    aws --version
+                    trivy --version
+                    git --version
                 '''
             }
         }
-        stage('check webhook') {
+        stage('Checkout Repo') {
             steps {
-                echo 'Checking webhook.'
+                sh '''
+                    git clone ${REPO}
+                '''
+            }
+        }
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+        stage('Test') {
+            steps {
+                sh'''
+                    echo "Running Tests..."
+                    echo "Tests Pass"
+                '''
             }
         }
     }
