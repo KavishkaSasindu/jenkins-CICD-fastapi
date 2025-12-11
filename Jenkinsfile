@@ -35,19 +35,15 @@ pipeline {
         }
         stage('Build') {
             when {
-                expression (currentBuild.currentResult == "SUCCESS")
+                expression {currentBuild.currentResult == "SUCCESS"}
             }
             steps {
                 script {
                     stage {
-                        sh '''
-                            docker build -t ${IMAGE}:${TAG} .
-                        '''
+                        sh "docker build -t ${IMAGE}:${TAG} . "
                     }
                     stage {
-                        sh '''
-                            docker images
-                        '''
+                        sh "docker images"
                     }
                 }
             }
