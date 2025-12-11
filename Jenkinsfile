@@ -38,10 +38,10 @@ pipeline {
                 expression {currentBuild.currentResult == "SUCCESS"}
             }
             steps {
-                sh '''
+                sh """
                     docker build -t ${IMAGE}:${TAG} .
                     docker images 
-                '''
+                """
 
                 
             }
