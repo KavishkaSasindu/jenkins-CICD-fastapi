@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-set -o
+set -e
 
 echo "Runing alembic migrations..."
 alembic upgrade head
