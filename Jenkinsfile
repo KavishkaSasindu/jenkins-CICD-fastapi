@@ -23,17 +23,17 @@ pipeline {
                 '''
             }
         }
-        stage('Clean Workspace') {
-            steps {
-                cleanWs()
-            }
-        }
         stage('Test') {
             steps {
                 sh'''
                     echo "Running Tests..."
                     echo "Tests Pass"
                 '''
+            }
+        }
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
             }
         }
     }
