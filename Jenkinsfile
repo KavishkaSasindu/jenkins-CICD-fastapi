@@ -3,6 +3,8 @@ pipeline {
 
     environment {
         REPO = "https://github.com/KavishkaSasindu/jenkins-CICD-fastapi.git"
+        IMAGE = "fastapi-app"
+        TAG = "${BUILD_NUMBER}"
     }
 
     stages {
@@ -29,6 +31,25 @@ pipeline {
                     echo "Running Tests..."
                     echo "Tests Pass"
                 '''
+            }
+        }
+        stage('Build') {
+            when {
+                expression (currentBuild.currentResult == "SUCCESS")
+            }
+            steps {
+                script {
+                    stage {
+                        sh '''
+                            docker build -t ${IMAGE}:${TAG} .
+                        '''
+                    }
+                    stage {
+                        sh '''
+                            docker images
+                        '''
+                    }
+                }
             }
         }
         stage('Clean Workspace') {
