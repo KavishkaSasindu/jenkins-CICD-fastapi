@@ -21,6 +21,7 @@ pipeline {
         stage('Checkout Repo') {
             steps {
                 sh '''
+                    rm -rf jenkins-CICD-fastapi
                     git clone ${REPO}
                 '''
             }
