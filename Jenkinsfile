@@ -38,14 +38,12 @@ pipeline {
                 expression {currentBuild.currentResult == "SUCCESS"}
             }
             steps {
-                script {
-                    stage {
-                        sh "docker build -t ${IMAGE}:${TAG} . "
-                    }
-                    stage {
-                        sh "docker images"
-                    }
-                }
+                sh '''
+                    docker build -t ${IMAGE}:${TAG} .
+                    docker images 
+                '''
+
+                
             }
         }
         stage('Clean Workspace') {
