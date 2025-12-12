@@ -7,6 +7,7 @@ pipeline {
         TAG = "${BUILD_NUMBER}"
         AWS_ACCOUNT_ID = "525163865240"
         AWS_REGION = "us-east-1"
+        REPO_NAME = "fastapi_repo"
     }
 
     stages {
@@ -73,13 +74,13 @@ pipeline {
                     echo "Tagging Docker image..."
 
                     sh """
-                        docker tag ${IMAGE}:${TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE}:${TAG}
+                        docker tag ${IMAGE}:${TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPO_NAME}:${TAG}
                     """
 
                     echo "Pushing Docker image to ECR..."
 
                     sh """
-                        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE}:${TAG}
+                        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPO_NAME}:${TAG}
                     """
 
                     echo "Image pushed successfully!"
@@ -87,7 +88,7 @@ pipeline {
                     echo "Deleting docker image from server..."
 
                     sh """
-                        docker rmi ${IMAGE}:${TAG}
+                        docker rmi ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPO_NAME}:${TAG}
                         docker images
                     """
                 }
