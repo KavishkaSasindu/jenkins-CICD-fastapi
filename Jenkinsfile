@@ -5,6 +5,8 @@ pipeline {
         REPO = "https://github.com/KavishkaSasindu/jenkins-CICD-fastapi.git"
         IMAGE = "fastapi-app"
         TAG = "${BUILD_NUMBER}"
+        AWS_ACCOUNT_ID = "525163865240"
+        AWS_REGION = "us-east-1"
     }
 
     stages {
@@ -47,6 +49,48 @@ pipeline {
                 
             }
         }
+        stage('Scan the image') {
+            steps {
+                sh "trivy image ${IMAGE}:${TAG}"
+            }
+        }
+        stage("Push to ECR") {
+            when {
+                expression { currentBuild.currentResult == "SUCCESS" }
+            }
+            steps {
+                script {
+
+                    echo "Logging in to AWS ECR..."
+
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding',credentialsId: 'AWS_Credentials']]) {
+                        sh """
+                            aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+                        """
+                    }
+
+                    echo "Tagging Docker image..."
+
+                    sh """
+                        docker tag ${IMAGE}:${TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE}:${TAG}
+                    """
+
+                    echo "Pushing Docker image to ECR..."
+
+                    sh """
+                        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE}:${TAG}
+                    """
+
+                    echo "Image pushed successfully!"
+
+                    echo "Deleting docker image from server..."
+
+                    docker rmi ${IMAGE}:${TAG}
+                    docker images
+                }
+            }
+        }
+
         stage('Clean Workspace') {
             steps {
                 cleanWs()
