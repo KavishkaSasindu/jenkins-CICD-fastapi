@@ -89,6 +89,7 @@ pipeline {
 
                     sh """
                         docker rmi ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPO_NAME}:${TAG}
+                        docker rmi ${IMAGE}:${TAG}
                         docker images
                     """
                 }
