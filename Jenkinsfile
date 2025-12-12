@@ -85,8 +85,10 @@ pipeline {
 
                     echo "Deleting docker image from server..."
 
-                    docker rmi ${IMAGE}:${TAG}
-                    docker images
+                    sh """
+                        docker rmi ${IMAGE}:${TAG}
+                        docker images
+                    """
                 }
             }
         }
