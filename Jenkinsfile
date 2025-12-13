@@ -107,7 +107,7 @@ pipeline {
                     rm -rf manifest-repo
                     git clone --depth 1 ${MANIFEST_REPO} manifest-repo
 
-                    cd manifest-repo/fastapi-infra-manifest
+                    cd manifest-repo/fastapi-app-helm
 
                     echo "Updating image tag....."
                     yq -i '.deployment.tag = "'${TAG}'"' values.yaml
