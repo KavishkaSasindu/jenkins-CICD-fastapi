@@ -5,6 +5,13 @@ This repository contains a full DevOps CI/CD pipeline architecture for automatin
 #### This project follows a GitOps workflow. 
 The Kubernetes manifests and Helm charts are maintained in the [Infrastructure/Manifest Repository](https://github.com/KavishkaSasindu/fastapi-infra-manifest).
 
+
+---
+
+## Architecture
+
+![Pipeline Architecture](fatapi-pipeline-arch-new.png)
+
 ---
 
 ## Table of Contents
@@ -27,12 +34,6 @@ Key features include:
 - ArgoCD GitOps deployment strategy
 - AWS ECR for container registry
 - Terraform for provisioning infrastructure
-
----
-
-## Architecture
-
-![Pipeline Architecture](fatapi-pipeline-arch-new.png)
 
 ---
 
