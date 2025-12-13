@@ -8,6 +8,8 @@ pipeline {
         AWS_ACCOUNT_ID = "525163865240"
         AWS_REGION = "us-east-1"
         REPO_NAME = "fastapi_repo"
+        GITHUB_TOKEN = credentials('github_token')
+        MANIFEST_REPO = "https://github.com/KavishkaSasindu/fastapi-infra-manifest.git"
     }
 
     stages {
@@ -95,7 +97,31 @@ pipeline {
                 }
             }
         }
+        stage('Manifest Repo Tag Change') {
+            when {
+                expression {currentBuild.currentResult == "SUCCESS"}
+            }
+            steps {
+                sh"""
+                    echo "Cloning manifest repository ....."
+                    rm -rf manifest-repo
+                    git clone --depth 1 ${MANIFEST_REPO} manifest-repo
 
+                    cd manifest-repo/fastapi-infra-manifest
+
+                    echo "Updating image tag....."
+                    yq -i '.deployment.tag = "'${TAG}'"' values.yaml
+
+                    echo "Configuring Git identity..."
+                    git config user.email "jenkins@ci.com"
+                    git config user.name "Jenkins CI"
+
+                    git add values.yaml
+                    git commit -m "ci: update FastAPI image tag to ${TAG}"
+                    git push https://${GITHUB_TOKEN}@github.com/KavishkaSasindu/fastapi-infra-manifest.git
+                """
+            }
+        }
         stage('Clean Workspace') {
             steps {
                 cleanWs()
