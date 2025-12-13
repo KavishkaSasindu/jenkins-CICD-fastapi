@@ -2,6 +2,9 @@
 
 This repository contains a full DevOps CI/CD pipeline architecture for automating application deployment to a Kubernetes cluster using Jenkins, Docker, AWS ECR, Helm, Terraform, and ArgoCD.
 
+#### This project follows a GitOps workflow. 
+The Kubernetes manifests and Helm charts are maintained in the [Infrastructure/Manifest Repository](https://github.com/KavishkaSasindu/fastapi-infra-manifest).
+
 ---
 
 ## Table of Contents
